@@ -6,17 +6,8 @@ from simulation import simulation
 pygame.init()
 # Constants
 WIDTH, HEIGHT = 800, 600
-CELL_SIZE = 5
+CELL_SIZE = 10
 COLS, ROWS = WIDTH // CELL_SIZE, HEIGHT // CELL_SIZE
-
-""" 
-[
-        {x: 5,
-    y: 1},
-    {x:7,
-    y: 3}
-]
- """
 
 grid = []
 
@@ -33,12 +24,14 @@ def draw_screen():
     """Draw the current game state"""
     screen.fill(BLACK)
     for i in grid:
-        pygame.draw.rect(screen, WHITE, (i["x"], i["y"], CELL_SIZE, CELL_SIZE))
+        pygame.draw.rect(
+            screen, WHITE, (i["x"], i["y"], CELL_SIZE - 1, CELL_SIZE-1))
     pygame.display.flip()
 
 
 def random_initial_positions():
-    n_squares = random.randrange(20, 300)
+    square_density = (WIDTH * HEIGHT) // (CELL_SIZE * CELL_SIZE) // 100
+    n_squares = random.randrange(300, 400)
     for _ in range(n_squares):
         x_axis = random.randrange(0, WIDTH, CELL_SIZE)
         y_axis = random.randrange(0, HEIGHT, CELL_SIZE)
@@ -67,7 +60,8 @@ def main():
 
         # Game logic
         if not paused:
-            simulation()
+            simulation(grid)
+            paused = True
 
         # Drawing
         draw_screen()
