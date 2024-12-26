@@ -1,27 +1,42 @@
-""" from game_of_life import HEIGHT, WIDTH, CELL_SIZE """
+DIFF = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
 
 
-""" def check_neighbors(grid, square):
+def check_neighbors(grid, square: tuple[int, int], ROWS, COLS):
     count = 0
-    for i in range(-1, 1):
-        for j in range(-1, 1):
-            if ((i < 0 or i > WIDTH/CELL_SIZE) or
-                    (j < 0 or i > HEIGHT/CELL_SIZE)):
+    for d in DIFF:
+        neighbor = (square[0] + d[0], square[1] + d[1])
+        if ((neighbor[0] < 0 or neighbor[1] < 0) or (neighbor[0] > ROWS or neighbor[1] > COLS)):
+            continue
+        if neighbor in grid:
+            count += 1
+    return count
+
+
+def get_checkable_positions(grid, ROWS, COLS) -> list[tuple[int, int]]:
+    checkable_neighbors = []
+    for square in grid:
+        for d in DIFF:
+            neighbor = (square[0] + d[0], square[1] + d[1])
+            if ((neighbor[0] < 0 or neighbor[1] < 0) or (neighbor[0] > ROWS or neighbor[1] > COLS)):
                 continue
-            print(next(item for item in grid if item["x"]
-                       == i+square["x"] and item["x"] == j + square["y"]))
+            if neighbor not in checkable_neighbors:
+                checkable_neighbors.append(neighbor)
+    return checkable_neighbors
 
-    return
 
-
-def check_positions(grid):
-    for i in grid:
-        check_neighbors(grid, i) """
+def check_positions(grid, ROWS, COLS):
+    new_grid = []
+    cells_to_check = get_checkable_positions(grid, ROWS, COLS)
+    for i in cells_to_check:
+        n_neighbors = check_neighbors(grid, i, ROWS, COLS)
+        if n_neighbors == 3:
+            new_grid.append(i)
+        elif (i in grid) and (n_neighbors == 2):
+            new_grid.append(i)
+    return new_grid
 
 
 """ Main game logic """
-
-
-def simulation(grid):
-    """ check_positions(grid) """
-    pass
+def simulation(grid: set, ROWS, COLS):
+    new_grid = check_positions(grid, ROWS, COLS)
+    return new_grid
