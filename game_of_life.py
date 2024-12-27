@@ -50,6 +50,8 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     paused = not paused
+                if event.key == pygame.K_c:
+                    grid = []
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 # Handle mouse clicks
                 mouse_pos = pygame.mouse.get_pos()
